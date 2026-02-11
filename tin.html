@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ID Care - TIN Correction Form</title>
+
+<script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
+
+<style>
+*{
+  box-sizing:border-box;
+  font-family: "Segoe UI", system-ui, Arial;
+}
+body{
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  min-height:100vh;
+  margin:0;
+  padding:20px;
+}
+
+/* Main Card */
+.form-container{
+  background:#fff;
+  width:100%;
+  max-width:480px;
+  border-radius:20px;
+  box-shadow:0 25px 60px rgba(0,0,0,0.25);
+  padding:24px 26px 28px;
+  animation: fadeIn 0.6s ease;
+  position:relative;
+}
+
+/* Header Top */
+.top-header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:10px;
+}
+
+.logo-box{
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+
+.logo-box img{
+  height:40px;
+  background:#fff;
+  padding:4px;
+  border-radius:8px;
+  border:1px solid #eee;
+}
+
+.brand-text{
+  font-size:20px;
+  font-weight:700;
+  color:#0a8bd6;
+}
+
+.home-link{
+  text-decoration:none;
+  font-size:20px;
+  background:#eef5ff;
+  padding:8px 10px;
+  border-radius:50%;
+  border:1px solid #dbe7ff;
+  transition:.2s;
+}
+.home-link:hover{
+  background:#dbe7ff;
+}
+
+/* Header */
+.form-header{
+  text-align:center;
+  margin-bottom:16px;
+}
+.form-header h2{
+  margin:0;
+  font-size:22px;
+  color:#2c3e50;
+}
+.form-header p{
+  margin:6px 0 0;
+  font-size:13px;
+  color:#7f8c8d;
+}
+
+/* Input */
+.form-group{
+  margin-top:14px;
+}
+label{
+  font-size:13px;
+  color:#34495e;
+  font-weight:600;
+  display:block;
+  margin-bottom:5px;
+}
+input, textarea{
+  width:100%;
+  padding:11px 12px;
+  border-radius:10px;
+  border:1px solid #ddd;
+  outline:none;
+  font-size:14px;
+  transition:0.2s;
+}
+input:focus, textarea:focus{
+  border-color:#667eea;
+  box-shadow:0 0 0 2px rgba(102,126,234,0.15);
+}
+textarea{
+  resize:none;
+  min-height:80px;
+}
+
+/* File Upload */
+.file-box{
+  border:2px dashed #667eea;
+  border-radius:12px;
+  padding:12px;
+  text-align:center;
+  font-size:13px;
+  color:#667eea;
+  cursor:pointer;
+  transition:0.2s;
+}
+.file-box:hover{
+  background:#f3f5ff;
+}
+input[type="file"]{
+  display:none;
+}
+
+/* Image Preview */
+.preview-box{
+  margin-top:10px;
+  display:none;
+  text-align:center;
+}
+.preview-box img{
+  max-width:150px;
+  border-radius:10px;
+  border:1px solid #ddd;
+}
+
+/* Button */
+button{
+  width:100%;
+  margin-top:20px;
+  padding:12px;
+  border:none;
+  border-radius:12px;
+  background:linear-gradient(135deg,#667eea,#00c6ff);
+  color:#fff;
+  font-size:15px;
+  font-weight:600;
+  cursor:pointer;
+  transition:0.25s;
+}
+button:hover{
+  transform:translateY(-1px);
+  box-shadow:0 10px 25px rgba(102,126,234,0.4);
+}
+
+/* Loading Overlay */
+.loading{
+  position:absolute;
+  top:0; left:0;
+  width:100%; height:100%;
+  background:rgba(255,255,255,0.85);
+  display:none;
+  justify-content:center;
+  align-items:center;
+  border-radius:20px;
+  font-size:16px;
+  font-weight:600;
+  color:#667eea;
+}
+
+/* Success Message */
+.success-box{
+  display:none;
+  text-align:center;
+  margin-top:15px;
+  color:#27ae60;
+  font-size:14px;
+  font-weight:600;
+}
+
+.form-footer{
+  text-align:center;
+  font-size:12px;
+  color:#95a5a6;
+  margin-top:12px;
+}
+
+@keyframes fadeIn{
+  from{opacity:0; transform:translateY(20px);}
+  to{opacity:1; transform:translateY(0);}
+}
+</style>
+</head>
+<body>
+
+<div class="form-container">
+
+  <div class="loading" id="loadingBox">⏳ Uploading... Please wait</div>
+
+  <!-- TOP HEADER -->
+  <div class="top-header">
+    <div class="logo-box">
+      <img src="https://www.idcare.pro/wp-content/uploads/2026/01/main-logo.png">
+      <div class="brand-text"></div>
+    </div>
+
+    <a href="https://idcare.pro" target="_blank" class="home-link">🏠</a>
+  </div>
+
+  <!-- FORM HEADER -->
+  <div class="form-header">
+    <h2> টিআইএন সংশোধন ফর্ম</h2>
+    <p>TIN Correction Request Form</p>
+  </div>
+
+  <form id="contactForm">
+
+    <div class="form-group">
+      <label>Full Name</label>
+      <input type="text" name="name" placeholder="আপনার নাম লিখুন" required>
+    </div>
+
+    <div class="form-group">
+      <label>TIN Number</label>
+      <input type="text" name="tin" placeholder="TIN নাম্বার লিখুন" required>
+    </div>
+
+    <div class="form-group">
+      <label>Message</label>
+      <textarea name="message" placeholder="আপনার সমস্যার বিবরণ লিখুন..."></textarea>
+    </div>
+
+    <div class="form-group">
+      <label>Upload Document / Image</label>
+      <label class="file-box">
+        Click to upload image 📸
+        <input type="file" id="imageFile" accept="image/*" required>
+      </label>
+      <div class="preview-box" id="previewBox">
+        <img id="previewImg">
+      </div>
+    </div>
+
+    <button type="submit">🚀 Submit Request</button>
+  </form>
+
+  <div class="success-box" id="successBox">
+    ✅ ফর্ম সফলভাবে সাবমিট হয়েছে!
+  </div>
+
+  <div class="form-footer">
+    © 2026 ID Care • Secure Data System
+  </div>
+
+</div>
+
+<script>
+(function(){
+  emailjs.init("X7TpcyrRR6pW6HbtH"); 
+})();
+
+// Image Preview
+document.getElementById("imageFile").addEventListener("change", function(){
+  let file = this.files[0];
+  if(file){
+    let reader = new FileReader();
+    reader.onload = function(e){
+      document.getElementById("previewImg").src = e.target.result;
+      document.getElementById("previewBox").style.display = "block";
+    }
+    reader.readAsDataURL(file);
+  }
+});
+
+// Cloudinary Upload
+async function uploadImage(file) {
+  let formData = new FormData();
+  formData.append("file", file);
+  formData.append("upload_preset", "Upload"); 
+
+  let res = await fetch("https://api.cloudinary.com/v1_1/ddxsm2rak/image/upload", {
+    method: "POST",
+    body: formData
+  });
+
+  let data = await res.json();
+  return data.secure_url;
+}
+
+// Form Submit
+document.getElementById("contactForm").addEventListener("submit", async function(e){
+  e.preventDefault();
+
+  document.getElementById("loadingBox").style.display = "flex";
+
+  let file = document.getElementById("imageFile").files[0];
+  let imageUrl = "";
+
+  if(file){
+    imageUrl = await uploadImage(file);
+  }
+
+  let params = {
+    name: this.name.value,
+    tin: this.tin.value,
+    message: this.message.value,
+    time: new Date().toLocaleString(),
+    image_url: imageUrl
+  };
+
+  emailjs.send("service_bkm4bhg", "template_32h25ya", params)
+  .then(() => {
+    document.getElementById("loadingBox").style.display = "none";
+    document.getElementById("successBox").style.display = "block";
+    document.getElementById("contactForm").reset();
+    document.getElementById("previewBox").style.display = "none";
+  })
+  .catch((err) => {
+    document.getElementById("loadingBox").style.display = "none";
+    alert("❌ Error! Please try again.");
+    console.log(err);
+  });
+});
+</script>
+
+</body>
+</html>
